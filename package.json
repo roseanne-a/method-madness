@@ -1,0 +1,24 @@
+{
+  "name": "method-madness",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@discordjs/rest": "^1.0.1",
+    "@napi-rs/canvas": "^0.1.28",
+    "customizable-discordjs-pagination": "^2.0.1",
+    "discord.js": "^14.1.2",
+    "dotenv": "^16.0.1",
+    "knex": "^2.2.0",
+    "node-twitch": "^0.4.5",
+    "nodemon": "^2.0.19",
+    "pg": "^8.7.3"
+  }
+}
