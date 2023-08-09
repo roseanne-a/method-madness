@@ -30,6 +30,6 @@ module.exports = {
             content: method.description,
           });
       }
-    }
+    } else if (interaction.isModalSubmit()) console.log(interaction);
   },
 };
