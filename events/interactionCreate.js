@@ -1,4 +1,3 @@
-const knex = require("../src/db/connection");
 module.exports = {
   name: "interactionCreate",
   async execute(interaction) {
@@ -20,16 +19,6 @@ module.exports = {
           ephemeral: true,
         });
       }
-    } else if (interaction.isSelectMenu()) {
-      const listOfMethods = await knex("methods").select("*");
-      const cmd = interaction.values[0];
-
-      for (const method of listOfMethods) {
-        if (method.name === cmd)
-          await interaction.reply({
-            content: method.description,
-          });
-      }
-    } else if (interaction.isModalSubmit()) console.log(interaction);
+    }
   },
 };
