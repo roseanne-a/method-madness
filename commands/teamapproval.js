@@ -5,6 +5,7 @@ const {
   ButtonStyle,
   ButtonBuilder,
   ComponentType,
+  Colors,
   PermissionFlagsBits,
 } = require("discord.js");
 const { Pagination } = require("pagination.djs");
@@ -101,16 +102,17 @@ module.exports = {
       time: 3_600_000,
     });
 
+    let teamName;
     collector.on("collect", async (i) => {
       if (i.customId === "approve") {
-        let teamName =
+        teamName =
           pagination.embeds[pagination.currentPage - 1].data.title.substring(6);
         await approveTeam(teamName);
-        await i.reply("That team has been approved!");
+        await i.reply(
+          "That team has been approved and the role and channel have been made!"
+        );
 
         const approvedTeam = await getTeam(teamName);
-
-        console.log(approvedTeam);
 
         let m1t = false;
         let m2t = false;
@@ -140,7 +142,6 @@ module.exports = {
           approvedTeam.memberThreePromo = "http://twitch.tv";
           m3t = true;
         }
-
         if (
           !approvedTeam.mascot ||
           approvedTeam.mascot.length < 1 ||
@@ -148,6 +149,20 @@ module.exports = {
         )
           approvedTeam.mascot =
             "https://media.tenor.com/Ny3gqWeXc38AAAAC/shiny-ditto-dance.gif";
+
+        if (
+          approvedTeam.memberTwo === "none" ||
+          !approvedTeam.memberTwo ||
+          approvedTeam.memberTwo === ""
+        )
+          approvedTeam.memberTwo = "Ditto";
+
+        if (
+          approvedTeam.memberThree === "none" ||
+          !approvedTeam.memberThree ||
+          approvedTeam.memberThree === ""
+        )
+          approvedTeam.memberThree = "Ditto";
         const row = new ActionRowBuilder()
           .addComponents(
             new ButtonBuilder()
@@ -211,10 +226,46 @@ module.exports = {
             text: "Method Madness",
           });
 
+        const newRole = await interaction.guild.roles
+          .create({
+            name: teamName,
+            color: Colors.Random,
+            reason: "MMM",
+          })
+          .then((result) => result)
+          .catch(console.error);
+
+        let channelName = teamName.replace(" ", "-");
+        await interaction.guild.channels
+          .create({
+            name: channelName,
+            parent: "1138651074002178069",
+            permissionOverwrites: [
+              {
+                id: interaction.guild.id,
+                deny: [PermissionFlagsBits.ViewChannel],
+              },
+              {
+                id: newRole.id,
+                allow: [PermissionFlagsBits.ViewChannel],
+              },
+            ],
+          })
+          .then(console.log)
+          .catch(console.error);
+
+        await interaction.guild.members
+          .addRole({
+            user: interaction.user.id,
+            role: newRole.id,
+          })
+          .then(console.log)
+          .catch(console.error);
+
         const channel = await interaction.client.channels.fetch(
           "1138605476414750785"
         );
-        await channel.send({
+        return await channel.send({
           embeds: [teamEmbed],
           components: [row],
         });

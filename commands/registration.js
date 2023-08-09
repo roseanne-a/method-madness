@@ -155,9 +155,10 @@ module.exports = {
                                   })
                                   .then((collected) => {
                                     memberOne = collected.first().content;
-                                    interaction.channel.messages.delete(
-                                      interaction.channel.lastMessageId
-                                    );
+                                    if (memberOne === none)
+                                      interaction.channel.messages.delete(
+                                        interaction.channel.lastMessageId
+                                      );
                                     interaction.editReply({
                                       content: `First team member: ${memberOne}.`,
                                       ephemeral: true,
@@ -190,7 +191,7 @@ module.exports = {
                                             //team 2
                                             interaction
                                               .editReply({
-                                                content: `Who is the second team member?`,
+                                                content: `Who is the second team member? If none, type "none".`,
                                                 fetchReply: true,
                                                 ephemeral: true,
                                               })
@@ -246,7 +247,7 @@ module.exports = {
                                                             //team 3
                                                             interaction
                                                               .editReply({
-                                                                content: `Who is the third team member?`,
+                                                                content: `Who is the third team member?  If none, type "none".`,
                                                                 fetchReply: true,
                                                                 ephemeral: true,
                                                               })
@@ -590,12 +591,6 @@ module.exports = {
                 });
               });
           });
-      })
-      .catch((collected) => {
-        interaction.editReply({
-          content: "Time ran out or there was an error. Please try again!",
-          ephemeral: true,
-        });
       });
 
     // let team_name = interaction.options.getString("team_name");
